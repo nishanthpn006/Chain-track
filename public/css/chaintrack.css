@@ -1,0 +1,818 @@
+/* ============================================================================
+   ChainTrack – Digital Chain-of-Custody Tracking System
+   Clean, institutional, high-contrast investigation management interface
+   Restrained color palette: Slate / Neutral White / Institutional Navy Accent
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Surface & Page Backgrounds */
+  --ct-bg:             #f8fafc;
+  --ct-surface:        #ffffff;
+  --ct-surface2:       #f1f5f9;
+  --ct-surface3:       #e2e8f0;
+
+  /* Borders */
+  --ct-border:         #e2e8f0;
+  --ct-border-dark:    #cbd5e1;
+
+  /* Typography */
+  --ct-text:           #0f172a;
+  --ct-text-secondary: #334155;
+  --ct-muted:          #64748b;
+  --ct-muted-light:    #94a3b8;
+
+  /* Institutional Navy Primary Accent (No neon, no gradients) */
+  --ct-accent:         #1e40af;
+  --ct-accent-hover:   #1d4ed8;
+  --ct-accent-subtle:  #eff6ff;
+  --ct-accent-border:  #bfdbfe;
+
+  /* Semantic Colors (Subtle backgrounds with high-contrast text) */
+  --ct-success:        #15803d;
+  --ct-success-bg:     #f0fdf4;
+  --ct-success-border: #bbf7d0;
+
+  --ct-warning:        #b45309;
+  --ct-warning-bg:     #fffbeb;
+  --ct-warning-border: #fde68a;
+
+  --ct-danger:         #b91c1c;
+  --ct-danger-bg:      #fef2f2;
+  --ct-danger-border:  #fecaca;
+
+  --ct-info:           #0369a1;
+  --ct-info-bg:        #f0f9ff;
+  --ct-info-border:    #bae6fd;
+
+  /* Layout & Geometry */
+  --ct-sidebar-w:      250px;
+  --ct-radius-sm:      4px;
+  --ct-radius:         6px;
+  --ct-radius-md:      8px;
+
+  /* Subtle, purposeful depth */
+  --ct-shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.05);
+  --ct-shadow:         0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --ct-shadow-md:      0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  background: var(--ct-bg);
+  color: var(--ct-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Monospace font for reference codes */
+.mono, .ref-code, code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+}
+
+/* -----------------------------------------------------------------------------
+   Sidebar & Navigation (Clean, deep-slate institutional style)
+   ----------------------------------------------------------------------------- */
+#ct-sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--ct-sidebar-w);
+  height: 100vh;
+  background: #0f172a;
+  border-right: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.ct-brand {
+  padding: 18px 20px;
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ct-brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ct-brand small {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.ct-nav {
+  padding: 12px 0;
+  flex: 1;
+}
+.ct-nav-section {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #64748b;
+  padding: 16px 20px 6px;
+}
+.ct-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.84rem;
+  border-left: 3px solid transparent;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.ct-nav-item:hover {
+  color: #ffffff;
+  background: #1e293b;
+}
+.ct-nav-item.active {
+  color: #ffffff;
+  background: #1e293b;
+  border-left-color: #38bdf8;
+  font-weight: 600;
+}
+.ct-nav-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+.ct-nav-item.active svg {
+  opacity: 1;
+  color: #38bdf8;
+}
+
+.ct-sidebar-footer {
+  padding: 14px 20px;
+  border-top: 1px solid #1e293b;
+  background: #090d16;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+.ct-sidebar-footer strong {
+  color: #f1f5f9;
+  display: block;
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------------
+   Main Layout & Top Bar
+   ----------------------------------------------------------------------------- */
+#ct-main {
+  margin-left: var(--ct-sidebar-w);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#ct-topbar {
+  height: 54px;
+  background: var(--ct-surface);
+  border-bottom: 1px solid var(--ct-border);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+#ct-topbar .page-title {
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: var(--ct-text);
+  flex: 1;
+}
+#ct-topbar .topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ct-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ct-surface2);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ct-text);
+}
+.ct-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ct-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+#ct-content {
+  padding: 24px 28px;
+  flex: 1;
+}
+
+/* -----------------------------------------------------------------------------
+   Page Header Structure
+   ----------------------------------------------------------------------------- */
+.ct-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+.ct-page-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ct-text);
+  margin: 0 0 3px 0;
+  letter-spacing: -0.2px;
+}
+.ct-page-desc {
+  font-size: 0.82rem;
+  color: var(--ct-muted);
+  margin: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   Cards & Containers
+   ----------------------------------------------------------------------------- */
+.ct-card {
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  box-shadow: var(--ct-shadow-sm);
+  margin-bottom: 20px;
+}
+.ct-card-header {
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--ct-text);
+}
+.ct-card-header svg {
+  color: var(--ct-muted);
+  flex-shrink: 0;
+}
+.ct-card-body {
+  padding: 20px;
+}
+
+/* -----------------------------------------------------------------------------
+   Operational Metric Cards
+   ----------------------------------------------------------------------------- */
+.ct-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.ct-stat {
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--ct-shadow-sm);
+}
+.ct-stat-label {
+  font-size: 0.73rem;
+  color: var(--ct-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.ct-stat-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--ct-text);
+  line-height: 1.1;
+}
+.ct-stat-sub {
+  font-size: 0.72rem;
+  color: var(--ct-muted-light);
+  margin-top: 4px;
+}
+.ct-stat-icon {
+  display: none; /* Removed decorative colorful icon boxes for clean operational design */
+}
+
+/* -----------------------------------------------------------------------------
+   Tables (Clear hierarchy, comfortable height, subtle borders)
+   ----------------------------------------------------------------------------- */
+.ct-table-wrap {
+  overflow-x: auto;
+  background: var(--ct-surface);
+}
+.ct-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+.ct-table th {
+  background: var(--ct-surface2);
+  color: var(--ct-muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--ct-border);
+  white-space: nowrap;
+}
+.ct-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--ct-border);
+  vertical-align: middle;
+  color: var(--ct-text-secondary);
+}
+.ct-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.ct-table tbody tr:hover {
+  background: #f8fafc;
+}
+.ct-table .ref-code {
+  font-weight: 600;
+  color: var(--ct-accent);
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+.ct-table .ref-code:hover {
+  text-decoration: underline;
+}
+
+/* -----------------------------------------------------------------------------
+   Status Badges (Compact, restrained semantic colors, high contrast)
+   ----------------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid transparent;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.badge.bg-success, .badge-success {
+  background: var(--ct-success-bg);
+  color: var(--ct-success);
+  border-color: var(--ct-success-border);
+}
+.badge.bg-warning, .badge-warning {
+  background: var(--ct-warning-bg);
+  color: var(--ct-warning);
+  border-color: var(--ct-warning-border);
+}
+.badge.bg-danger, .badge-danger {
+  background: var(--ct-danger-bg);
+  color: var(--ct-danger);
+  border-color: var(--ct-danger-border);
+}
+.badge.bg-primary, .badge.bg-info, .badge-primary {
+  background: var(--ct-info-bg);
+  color: var(--ct-info);
+  border-color: var(--ct-info-border);
+}
+.badge.bg-secondary, .badge-secondary {
+  background: var(--ct-surface2);
+  color: var(--ct-muted);
+  border-color: var(--ct-border);
+}
+.badge.bg-dark {
+  background: #334155;
+  color: #ffffff;
+}
+
+/* -----------------------------------------------------------------------------
+   Buttons (Subtle, rectangular with modest radius, purposeful primary)
+   ----------------------------------------------------------------------------- */
+.ct-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--ct-radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  line-height: 1.35;
+}
+.ct-btn:disabled, .ct-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ct-btn-primary {
+  background: var(--ct-accent);
+  color: #ffffff;
+  border-color: var(--ct-accent);
+}
+.ct-btn-primary:hover {
+  background: var(--ct-accent-hover);
+  border-color: var(--ct-accent-hover);
+  color: #ffffff;
+}
+
+.ct-btn-secondary {
+  background: var(--ct-surface);
+  color: var(--ct-text-secondary);
+  border-color: var(--ct-border-dark);
+}
+.ct-btn-secondary:hover {
+  background: var(--ct-surface2);
+  color: var(--ct-text);
+  border-color: #94a3b8;
+}
+
+.ct-btn-success {
+  background: var(--ct-success);
+  color: #ffffff;
+  border-color: var(--ct-success);
+}
+.ct-btn-success:hover {
+  background: #166534;
+}
+
+.ct-btn-danger {
+  background: var(--ct-danger);
+  color: #ffffff;
+  border-color: var(--ct-danger);
+}
+.ct-btn-danger:hover {
+  background: #991b1b;
+}
+
+.ct-btn-sm {
+  padding: 4px 10px;
+  font-size: 0.76rem;
+}
+
+/* -----------------------------------------------------------------------------
+   Forms & Controls
+   ----------------------------------------------------------------------------- */
+.ct-form-group {
+  margin-bottom: 16px;
+}
+.ct-label, .ct-form-label {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--ct-text-secondary);
+  margin-bottom: 5px;
+}
+.ct-form-label .text-danger, .ct-label .text-danger {
+  color: var(--ct-danger);
+}
+
+.ct-input, .ct-select, .ct-textarea, .ct-form-input, .ct-form-select {
+  width: 100%;
+  height: 36px;
+  background: #ffffff;
+  border: 1px solid var(--ct-border-dark);
+  border-radius: var(--ct-radius-sm);
+  color: var(--ct-text);
+  padding: 6px 12px;
+  font-size: 0.84rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.ct-textarea {
+  height: auto;
+  min-height: 80px;
+  resize: vertical;
+}
+.ct-input:focus, .ct-select:focus, .ct-textarea:focus,
+.ct-form-input:focus, .ct-form-select:focus {
+  border-color: var(--ct-accent);
+  box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.12);
+}
+.ct-input::placeholder, .ct-textarea::placeholder {
+  color: var(--ct-muted-light);
+}
+
+/* Form section grouping */
+.ct-form-section {
+  border-bottom: 1px solid var(--ct-border);
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+}
+.ct-form-section-title {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ct-muted);
+  margin-bottom: 14px;
+}
+
+/* Filter bar */
+.ct-filter-bar {
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  box-shadow: var(--ct-shadow-sm);
+}
+
+/* -----------------------------------------------------------------------------
+   Alerts & Feedback
+   ----------------------------------------------------------------------------- */
+.ct-alert {
+  padding: 11px 16px;
+  border-radius: var(--ct-radius-sm);
+  font-size: 0.83rem;
+  margin-bottom: 16px;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ct-alert-success {
+  background: var(--ct-success-bg);
+  border-color: var(--ct-success-border);
+  color: #14532d;
+}
+.ct-alert-danger {
+  background: var(--ct-danger-bg);
+  border-color: var(--ct-danger-border);
+  color: #7f1d1d;
+}
+.ct-alert-warning {
+  background: var(--ct-warning-bg);
+  border-color: var(--ct-warning-border);
+  color: #78350f;
+}
+.ct-alert-info {
+  background: var(--ct-info-bg);
+  border-color: var(--ct-info-border);
+  color: #0c4a6e;
+}
+
+/* -----------------------------------------------------------------------------
+   Item Dossier & Chronological Timeline (High Priority)
+   ----------------------------------------------------------------------------- */
+.ct-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.ct-detail-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ct-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+.ct-detail-value {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ct-text);
+}
+
+/* Permanent vertical audit timeline */
+.ct-timeline {
+  position: relative;
+  padding-left: 28px;
+  margin: 10px 0;
+}
+.ct-timeline::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--ct-border-dark);
+}
+.ct-timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+}
+.ct-timeline-item:last-child {
+  margin-bottom: 0;
+}
+.ct-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ct-accent);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--ct-border-dark);
+}
+.ct-timeline-item.initial::before {
+  background: var(--ct-success);
+}
+.ct-timeline-item.pending::before {
+  background: var(--ct-warning);
+}
+.ct-timeline-time {
+  font-size: 0.72rem;
+  color: var(--ct-muted);
+  margin-bottom: 4px;
+}
+.ct-timeline-body {
+  background: var(--ct-surface2);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  padding: 12px 16px;
+}
+.ct-timeline-title {
+  font-weight: 600;
+  font-size: 0.86rem;
+  color: var(--ct-text);
+  margin-bottom: 4px;
+}
+.ct-timeline-meta {
+  font-size: 0.78rem;
+  color: var(--ct-text-secondary);
+}
+
+/* -----------------------------------------------------------------------------
+   Clean Institutional Login Page
+   ----------------------------------------------------------------------------- */
+#login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  padding: 24px;
+}
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--ct-radius);
+  padding: 34px 32px;
+  box-shadow: var(--ct-shadow);
+}
+.login-logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.login-logo h1 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--ct-accent);
+  margin: 0 0 4px 0;
+  letter-spacing: -0.3px;
+}
+.login-logo p {
+  color: var(--ct-muted);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   Pagination
+   ----------------------------------------------------------------------------- */
+.ct-pagination {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.ct-page-btn {
+  padding: 5px 11px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  color: var(--ct-text-secondary);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+.ct-page-btn:hover {
+  background: var(--ct-surface2);
+  color: var(--ct-text);
+  border-color: var(--ct-border-dark);
+}
+.ct-page-btn.active {
+  background: var(--ct-accent);
+  border-color: var(--ct-accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+.ct-page-btn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* -----------------------------------------------------------------------------
+   Utility & Responsive Helpers
+   ----------------------------------------------------------------------------- */
+.d-flex          { display: flex; }
+.align-center    { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-1           { gap: 8px; }
+.gap-2           { gap: 12px; }
+.gap-3           { gap: 18px; }
+.w-100           { width: 100%; }
+.fw-600          { font-weight: 600; }
+.text-muted      { color: var(--ct-muted) !important; }
+.text-accent     { color: var(--ct-accent) !important; }
+.text-danger     { color: var(--ct-danger) !important; }
+.text-success    { color: var(--ct-success) !important; }
+.small           { font-size: 0.78rem; }
+.mb-1            { margin-bottom: 6px; }
+.mb-2            { margin-bottom: 12px; }
+.mb-3            { margin-bottom: 18px; }
+.mb-4            { margin-bottom: 24px; }
+.mt-1            { margin-top: 6px; }
+.mt-2            { margin-top: 12px; }
+.mt-3            { margin-top: 18px; }
+
+/* Print styling */
+@media print {
+  #ct-sidebar, #ct-topbar, .ct-btn, form {
+    display: none !important;
+  }
+  #ct-main {
+    margin-left: 0 !important;
+  }
+  #ct-content {
+    padding: 0 !important;
+  }
+  .ct-card {
+    border: 1px solid #94a3b8 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Responsive breakpoint */
+@media (max-width: 900px) {
+  #ct-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  #ct-sidebar.open {
+    transform: translateX(0);
+  }
+  #ct-main {
+    margin-left: 0;
+  }
+  #ct-content {
+    padding: 16px;
+  }
+  .ct-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

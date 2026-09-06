@@ -1,0 +1,13 @@
+﻿# ChainTrack .htaccess
+Options -Indexes
+DirectoryIndex index.php
+
+# Protect sensitive directories from direct browser access
+<FilesMatch "^(bootstrap|database|config)">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# Prevent access to PHP files in config, core, models, middleware
+RewriteEngine On
+RewriteRule ^(config|core|models|middleware|database)/ - [F,L]

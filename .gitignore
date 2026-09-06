@@ -1,0 +1,51 @@
+# =============================================================================
+# ChainTrack — Git Ignore Rules
+# =============================================================================
+
+# Secrets / Environment files
+.env
+.env.*
+*.env
+
+# Local database configuration (use config/database.example.php as template)
+/config/database.php
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+._*
+
+# Log files
+*.log
+logs/
+
+# Temporary and backup files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Runtime / session storage
+sessions/
+runtime/
+
+# Scratch and test artifacts
+scratch/
+tools/*test*
+tools/*debug*
+*_test.php
+test_*.php
+debug_*.php
+
+# Local AI agent / IDE internal state
+.gemini/
+.antigravity/
